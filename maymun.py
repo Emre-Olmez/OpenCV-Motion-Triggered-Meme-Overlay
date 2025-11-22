@@ -17,31 +17,31 @@ foto1_acik = False
 foto2_acik = False
 
 while True:
-    kontrol, matris = cam.read()#MATRİSİ OKUTMAMIZ LAZIM
+    kontrol, matris = cam.read()
 
-    matris_rgb = cv2.cvtColor(matris, cv2.COLOR_BGR2RGB)#PARMAK OKUYUCU RGB OKUSUN DİYE RGB DÖNDÜRDÜK
-    results = hands.process(matris_rgb)#OKUTMA İŞLEMİNİ RGB ÜZERİNDEN YAPTIK VE RESULTS DEĞİŞKENİNE ALDIK
+    matris_rgb = cv2.cvtColor(matris, cv2.COLOR_BGR2RGB)
+    results = hands.process(matris_rgb)
 
-    index_tip_y = None   # İşaret parmağı
+    index_tip_y = None 
 
-    if results.multi_hand_landmarks:#BİRDEN FAZLA ELİ ALGILAMASI İÇİN İŞLEM
+    if results.multi_hand_landmarks:
         for hand_landmarks in results.multi_hand_landmarks:
             mp_draw.draw_landmarks(matris, hand_landmarks, mp_hands.HAND_CONNECTIONS)
 
-            index_tip_y = hand_landmarks.landmark[8].y     # İşaret parmağı ucu İNDEXİ HEP 8 DİR KÜTÜPHANEYE ÖZEL SONDAKİ Y KOORDİNAT
+            index_tip_y = hand_landmarks.landmark[8].y 
 
 
-    #İŞARET PARMAĞI EKRANA GÖRE 0.5 DEN FAZLAYSA FOTO2 AÇ
+  
     if index_tip_y is not None and index_tip_y > 0.5:
         if foto2_acik:
-            cv2.destroyWindow("foto2")#FOTO2 AÇIKSA KAPAT EVLAT
+            cv2.destroyWindow("foto2")
             foto2_acik = False
 
         if not foto1_acik:
-            cv2.imshow("foto1",foto1)# FOTO1 İ AÇ
+            cv2.imshow("foto1",foto1)
             foto1_acik = True
 
-    #BAŞPARMAK EKRANA GÖRE 0.5 DEN AZSA FOTO1 AÇ
+ 
     if index_tip_y is not None and index_tip_y < 0.5:
         if foto1_acik:
             cv2.destroyWindow("foto1")
